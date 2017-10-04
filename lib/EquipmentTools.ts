@@ -1,4 +1,4 @@
-import STTApi from "./STTApi";
+import STTApi from "./index";
 
 export function loadFullTree(): Promise<void> {
     let mapEquipment: Set<number> = new Set();

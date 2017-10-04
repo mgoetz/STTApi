@@ -1,4 +1,4 @@
-import STTApi from "./STTApi";
+import STTApi from "./index";
 
 export function loadGauntlet(): Promise<any> {
 	return STTApi.executeGetRequest("gauntlet/status", {gauntlet_id: -1}).then((data: any) => {

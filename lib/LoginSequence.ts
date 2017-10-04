@@ -1,4 +1,4 @@
-import STTApi from "./STTApi";
+import STTApi from "./index";
 import CONFIG from "./CONFIG";
 import { matchCrew } from './CrewTools';
 import { matchShips } from './ShipTools';

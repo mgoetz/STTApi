@@ -23,7 +23,7 @@ import { mergeDeep } from './ObjectMerge';
 import Dexie from "dexie";
 import CONFIG from "./CONFIG";
 
-export class STTApi {
+export class STTApiClass {
 	private _accessToken: string | undefined;
 	private _net: NetworkInterface;
 	private _crewAvatars: any;
@@ -458,5 +458,3 @@ export class STTApi {
 		return this._net.get(CONFIG.URL_GITHUBRELEASES, {})
 	}
 }
-
-export default (new STTApi());

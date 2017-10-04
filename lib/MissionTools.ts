@@ -1,4 +1,4 @@
-import STTApi from "./STTApi";
+import STTApi from "./index";
 
 function loadQuestData(completed: boolean, quest: any): Promise<void> {
 	if (completed)
