@@ -118,19 +118,17 @@ export function calculateMissionCrewSuccess(): Array<IChallengeSuccess> {
     return log;
 }
 
-import {MinimalComplement, computeCrewSuccessmissionSuccess} from "./computeWorker";
-export {MinimalComplement} from "./computeWorker";
+export class MinimalComplement {
+	unneededCrew: Array<number>;
+    neededCrew: Array<number>;
+}
 
 export function calculateMinimalComplementAsync(): void {
-    //TODO: Figure out if we can use workers in typescript modules (this code is expensive to run)
-    STTApi.minimalComplement = computeCrewSuccessmissionSuccess(STTApi.missionSuccess);
-/*
-    let ComputeWorker = require("worker-loader!./computeWorker.ts");
+    let ComputeWorker = require("worker-loader?name=computeWorker.js!./computeWorker");
 
     const worker: Worker = new ComputeWorker();
     worker.addEventListener('message', (message: any) => {
         STTApi.minimalComplement = message.data;
     });
     worker.postMessage({ success: STTApi.missionSuccess });
-    */
 }

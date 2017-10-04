@@ -7,7 +7,7 @@
   "scripts": {
     "prepublish": "npm run build",
     "build": "tsc",
-    "postbuild": "copy lib\\*.d.ts dist\\",
+    "postbuild": "node_modules/.bin/copyfiles -f lib/*.d.ts dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,6 +22,8 @@
   },
   "homepage": "https://github.com/IAmPicard/STTApi#readme",
   "devDependencies": {
+    "@types/node": "^8.0.32",
+    "copyfiles": "^1.2.0",
     "typescript": "^2.5.3"
   },
   "dependencies": {

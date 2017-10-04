@@ -1,9 +1,9 @@
-export class MinimalComplement {
+class MinimalComplement {
 	unneededCrew: Array<number>;
     neededCrew: Array<number>;
 }
 
-export function computeCrewSuccessmissionSuccess(missionSuccess: any): MinimalComplement {
+function computeCrewSuccessmissionSuccess(missionSuccess: any): MinimalComplement {
     let baseline = 0;
     let allConsideredCrew = new Set<number>();
     missionSuccess.forEach((entry: any) => {
@@ -49,10 +49,6 @@ export function computeCrewSuccessmissionSuccess(missionSuccess: any): MinimalCo
     };
 }
 
-//TODO: Figure out if we can use workers in typescript modules
-/*
-// silly patch to make typescript happy
-const sendMessage: any = self.postMessage;
-self.addEventListener('message', (message) => {
-    sendMessage(computeCrewSuccessmissionSuccess(message.data.success));
-});*/
+self.addEventListener('message', (message: any) => {
+    (self as any).postMessage(computeCrewSuccessmissionSuccess(message.data.success));
+});
