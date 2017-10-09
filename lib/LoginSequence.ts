@@ -129,6 +129,29 @@ export function loginSequence(onProgress: (description: string) => void, loadMis
                 });
                 return Promise.all(iconPromises);
             });
+        }).then(() => {
+            onProgress('Finding item images...');
+
+            let iconPromises: Array<Promise<void>> = [];
+            STTApi.playerData.character.items.forEach((item: any) => {
+                item.iconUrl = CONFIG.DEFAULT_ITEM_ICON;
+				item.typeName = item.icon.file.replace("/items", "").split("/")[1];
+				item.symbol = item.icon.file.replace("/items", "").split("/")[2];
+
+                var fileName = item.name + CONFIG.RARITIES[item.rarity].name + '.png';
+                fileName = fileName.split(' ').join('');
+                fileName = fileName.split('\'').join('');
+
+                iconPromises.push(getWikiImageUrl(fileName, item.id).then((found: IFoundResult) => {
+                    STTApi.playerData.character.items.forEach((item: any) => {
+                        if (item.id === found.id)
+                            item.iconUrl = found.url;
+                    });
+
+                    return Promise.resolve();
+                }).catch((error: any) => { /*console.warn(error);*/ }));
+            });
+            return Promise.all(iconPromises);
         });
     });
 

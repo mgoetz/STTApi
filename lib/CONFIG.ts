@@ -1,3 +1,12 @@
+export interface Rarity {
+	name: string;
+	color: string;
+}
+
+function rgbToHex(r: number, g: number, b: number): string {
+	return "#" + ((b | g << 8 | r << 16) / 0x1000000).toString(16).substring(2);
+}
+
 export default class CONFIG {
 	static readonly URL_PLATFORM: string = "https://thorium.disruptorbeam.com/";
 	static readonly URL_SERVER: string = "https://stt.disruptorbeam.com/";
@@ -13,6 +22,17 @@ export default class CONFIG {
 	// releases URL
 	static readonly URL_GITHUBRELEASES: string = "https://api.github.com/repos/IAmPicard/StarTrekTimelinesSpreadsheet/releases";
 
+	static readonly DEFAULT_ITEM_ICON: string = 'https://stt.wiki/w/images/d/d6/ItemNameBasic.png';
+
 	// Every 10 days, check the wiki again for updated / new images
 	static readonly HOURS_TO_RECOVERY: number = 24 * 10;
+
+	static readonly RARITIES: Rarity[] = [
+		{ name: 'Basic', color: 'Grey' },
+		{ name: 'Common', color: rgbToHex(155, 155, 155) },
+		{ name: 'Uncommon', color: rgbToHex(80, 170, 60) },
+		{ name: 'Rare', color: rgbToHex(90, 170, 255) },
+		{ name: 'Super Rare', color: rgbToHex(170, 45, 235) },
+		{ name: 'Legendary', color: rgbToHex(253, 210, 106) }
+	];
 }
