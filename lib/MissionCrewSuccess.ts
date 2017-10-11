@@ -53,16 +53,23 @@ export function calculateMissionCrewSuccess(): Array<IChallengeSuccess> {
                         entry.roll += challenge.critical.threshold;
                     }
 
+                    let fixUp = function(trait: string): string {
+                        // Replace "nonhuman" with "alien" to match the search fixup
+                        if (trait =='nonhuman')
+                            return 'alien';
+                        return trait;
+                    }
+
                     if (challenge.trait_bonuses && (challenge.trait_bonuses.length > 0)) {
                         challenge.trait_bonuses.forEach((traitBonus: any) => {
-                            entry.traits.push({ trait: traitBonus.trait, bonus: traitBonus.bonuses[2] });
+                            entry.traits.push({ trait: fixUp(traitBonus.trait), bonus: traitBonus.bonuses[2] });
                         });
                     }
 
                     if (challenge.locks && (challenge.locks.length > 0)) {
                         challenge.locks.forEach((lock: any) => {
                             if (lock.trait) {
-                                entry.lockedTraits.push(lock.trait);
+                                entry.lockedTraits.push(fixUp(lock.trait));
                             }
                         });
                     }
