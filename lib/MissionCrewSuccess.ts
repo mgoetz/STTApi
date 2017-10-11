@@ -83,7 +83,7 @@ export function calculateMissionCrewSuccess(): Array<IChallengeSuccess> {
                             }
 
                             if (entry.crew_requirement.traits && (entry.crew_requirement.traits.length > 0)) {
-                                let matchingTraits: number = entry.crew_requirement.traits.filter((trait: string) => rawTraits.has(trait)).length;
+                                let matchingTraits: number = entry.crew_requirement.traits.filter((trait: string) => rawTraits.has(fixUp(trait))).length;
                                 if (matchingTraits != entry.crew_requirement.traits.length)
                                     return; // Doesn't meet trait requirements
                             }
