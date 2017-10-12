@@ -105,8 +105,8 @@ export function calculateMissionCrewSuccess(): Array<IChallengeSuccess> {
                         if (rollCrew == 0) {
                             var lowestSkill = 99999;
                             for (var skill in CONFIG.SKILLS) {
-                                if ((crew[entry.skill].core > 0) && (lowestSkill > crew[entry.skill].core)) {
-                                    lowestSkill = crew[entry.skill].core
+                                if ((crew[skill].core > 0) && (lowestSkill > crew[skill].core)) {
+                                    lowestSkill = crew[skill].core
                                 }
                             }
 
