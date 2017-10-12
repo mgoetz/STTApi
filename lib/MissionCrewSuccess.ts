@@ -1,4 +1,5 @@
 import STTApi from "./index";
+import CONFIG from "./CONFIG";
 
 export interface IChallengeSuccessTrait
 {
@@ -99,6 +100,18 @@ export function calculateMissionCrewSuccess(): Array<IChallengeSuccess> {
 
                         // Compute roll for crew
                         var rollCrew = crew[entry.skill].core;
+
+                        // If crew doesn't have a skill, its default value is lowest_skill / 5
+                        if (rollCrew == 0) {
+                            var lowestSkill = 99999;
+                            for (var skill in CONFIG.SKILLS) {
+                                if ((crew[entry.skill].core > 0) && (lowestSkill > crew[entry.skill].core)) {
+                                    lowestSkill = crew[entry.skill].core
+                                }
+                            }
+
+                            rollCrew = lowestSkill * STTApi.serverConfig.conflict.untrained_skill_coefficient;
+                        }
 
                         if (entry.traits && (entry.traits.length > 0)) {
                             let matchingTraits: number = entry.traits.filter((traitBonus: any) => rawTraits.has(traitBonus.trait)).length;
