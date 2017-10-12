@@ -10,6 +10,8 @@ export interface IChallengeSuccessCrew
 {
     crew: any;
     success: number;
+    rollRequired: number;
+    rollCrew: number;
 }
 
 export interface IChallengeSuccess
@@ -110,7 +112,7 @@ export function calculateMissionCrewSuccess(): Array<IChallengeSuccess> {
                                 successPercentage = 100;
                             }
 
-                            entry.crew.push({ crew: crew, success: successPercentage });
+                            entry.crew.push({ crew: crew, success: successPercentage, rollRequired: entry.roll, rollCrew: rollCrew});
                         }
                     });
 

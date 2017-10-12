@@ -324,7 +324,7 @@ export class STTApiClass {
 		// this code reloads minimal stuff to update the player information and merge things back in
 		// "player/resync_inventory" is more heavy-handed and has the potential to overwrite some stuff we added on like images, but can also bring in any new items, crew or ships
 		return this.executeGetRequest("player/resync_currency").then((data: any) => {
-			if (data.id) {
+			if (data.player) {
 				this._playerData.player = mergeDeep(this._playerData.player, data.player);
 				console.info("Resynced player currency data");
 				return Promise.resolve();
