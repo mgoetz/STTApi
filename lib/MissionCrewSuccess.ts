@@ -110,7 +110,7 @@ export function calculateMissionCrewSuccess(): Array<IChallengeSuccess> {
                                 }
                             }
 
-                            rollCrew = lowestSkill * STTApi.serverConfig.conflict.untrained_skill_coefficient;
+                            rollCrew = lowestSkill * STTApi.serverConfig.config.conflict.untrained_skill_coefficient;
                         }
 
                         if (entry.traits && (entry.traits.length > 0)) {
