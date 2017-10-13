@@ -277,10 +277,10 @@ export class STTApiClass {
 
 	loadServerConfig(): Promise<any> {
 		return this.executeGetRequest("config", {
-			platform:'WebGLPlayer',
+			platform:'WindowsPlayer',
 			device_type:'Desktop',
 			client_version:CONFIG.CLIENT_VERSION,
-			platform_folder:'webgl'
+			platform_folder:'win64'
 		}).then((data: any) => {
 			this._serverConfig = data;
 			console.info("Loaded server config");
