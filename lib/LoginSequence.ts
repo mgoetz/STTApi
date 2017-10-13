@@ -2,7 +2,7 @@ import STTApi from "./index";
 import CONFIG from "./CONFIG";
 import { matchCrew } from './CrewTools';
 import { matchShips } from './ShipTools';
-import { getWikiImageUrl, IFoundResult } from './WikiImageTools';
+import { IFoundResult } from './ImageProvider';
 import { loadMissionData } from './MissionTools';
 import { calculateMissionCrewSuccess, calculateMinimalComplementAsync } from './MissionCrewSuccess';
 
@@ -77,7 +77,7 @@ export function loginSequence(onProgress: (description: string) => void, loadMis
             onProgress('Finding crew images...');
             let iconPromises: Array<Promise<void>> = [];
             roster.forEach((crew: any) => {
-                iconPromises.push(getWikiImageUrl(crew.name.split(' ').join('_') + '_Head.png', crew.id).then((found: IFoundResult) => {
+                iconPromises.push(STTApi.imageProvider.getCrewImageUrl(crew, false, crew.id).then((found: IFoundResult) => {
                     STTApi.roster.forEach((crew: any) => {
                         if (crew.id === found.id)
                             crew.iconUrl = found.url;
@@ -85,7 +85,7 @@ export function loginSequence(onProgress: (description: string) => void, loadMis
 
                     return Promise.resolve();
                 }).catch((error: any) => { /*console.warn(error);*/ }));
-                iconPromises.push(getWikiImageUrl(crew.name.split(' ').join('_') + '.png', crew.id).then((found: IFoundResult) => {
+                iconPromises.push(STTApi.imageProvider.getCrewImageUrl(crew, true, crew.id).then((found: IFoundResult) => {
                     STTApi.roster.forEach((crew: any) => {
                         if (crew.id === found.id)
                             crew.iconBodyUrl = found.url;
@@ -97,7 +97,7 @@ export function loginSequence(onProgress: (description: string) => void, loadMis
 
             // Also load the avatars for crew not in the roster
             STTApi.crewAvatars.forEach((crew: any) => {
-                iconPromises.push(getWikiImageUrl(crew.name.split(' ').join('_') + '_Head.png', crew.id).then((found: IFoundResult) => {
+                iconPromises.push(STTApi.imageProvider.getCrewImageUrl(crew, false, crew.id).then((found: IFoundResult) => {
                     STTApi.crewAvatars.forEach((crew: any) => {
                         if (crew.id === found.id)
                             crew.iconUrl = found.url;
@@ -117,8 +117,7 @@ export function loginSequence(onProgress: (description: string) => void, loadMis
                 onProgress('Finding ship images...');
                 let iconPromises: Array<Promise<void>> = [];
                 ships.forEach((ship: any) => {
-                    var fileName = ship.name.split(' ').join('_').split('.').join('').split('\'').join('') + '.png';
-                    iconPromises.push(getWikiImageUrl(fileName, ship.name).then((found: IFoundResult) => {
+                    iconPromises.push(STTApi.imageProvider.getShipImageUrl(ship, ship.name).then((found: IFoundResult) => {
                         STTApi.ships.forEach((ship: any) => {
                             if (ship.name === found.id)
                                 ship.iconUrl = found.url;
@@ -138,11 +137,7 @@ export function loginSequence(onProgress: (description: string) => void, loadMis
 				item.typeName = item.icon.file.replace("/items", "").split("/")[1];
 				item.symbol = item.icon.file.replace("/items", "").split("/")[2];
 
-                var fileName = item.name + CONFIG.RARITIES[item.rarity].name + '.png';
-                fileName = fileName.split(' ').join('');
-                fileName = fileName.split('\'').join('');
-
-                iconPromises.push(getWikiImageUrl(fileName, item.id).then((found: IFoundResult) => {
+                iconPromises.push(STTApi.imageProvider.getItemImageUrl(item, item.id).then((found: IFoundResult) => {
                     STTApi.playerData.character.items.forEach((item: any) => {
                         if (item.id === found.id)
                             item.iconUrl = found.url;

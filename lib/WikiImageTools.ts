@@ -1,12 +1,10 @@
 import STTApi from "./index";
 import CONFIG from "./CONFIG";
+import { ImageProvider, IFoundResult } from './ImageProvider';
 
-export interface IFoundResult {
-	id: any;
-	url: string | undefined;
-}
+export { IFoundResult };
 
-export function getWikiImageUrl(fileName: string, id: any): Promise<IFoundResult> {
+function getWikiImageUrl(fileName: string, id: any): Promise<IFoundResult> {
 	return STTApi.wikiImages.where('fileName').equals(fileName).first((entry: any) => {
 		if (entry) {
 			if (entry.url) {
@@ -63,4 +61,24 @@ export function getWikiImageUrl(fileName: string, id: any): Promise<IFoundResult
 			});
 		});
 	});
+}
+
+export class WikiImageProvider implements ImageProvider {
+	getCrewImageUrl(crew: any, fullBody: boolean, id: any): Promise<IFoundResult> {
+		let fileName = crew.name.split(' ').join('_') + (fullBody ? '_Head' : '') + '.png';
+		return getWikiImageUrl(fileName, id);
+	}
+	getShipImageUrl(ship: any, id: any): Promise<IFoundResult> {
+		let fileName = ship.name.split(' ').join('_').split('.').join('').split('\'').join('') + '.png';
+		return getWikiImageUrl(fileName, id);
+	}
+	getItemImageUrl(item: any, id: any): Promise<IFoundResult> {
+		var fileName = item.name + CONFIG.RARITIES[item.rarity].name + '.png';
+		fileName = fileName.split(' ').join('').split('\'').join('');
+		return getWikiImageUrl(fileName, id);
+	}
+	getFactionImageUrl(faction: any, id: any): Promise<IFoundResult> {
+		let fileName = 'Icon' + faction.name.split(' ').join('') + '.png';
+		return getWikiImageUrl(fileName, id);
+	}
 }
