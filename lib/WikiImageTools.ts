@@ -65,7 +65,7 @@ function getWikiImageUrl(fileName: string, id: any): Promise<IFoundResult> {
 
 export class WikiImageProvider implements ImageProvider {
 	getCrewImageUrl(crew: any, fullBody: boolean, id: any): Promise<IFoundResult> {
-		let fileName = crew.name.split(' ').join('_') + (fullBody ? '_Head' : '') + '.png';
+		let fileName = crew.name.split(' ').join('_') + (fullBody ? '' : '_Head') + '.png';
 		return getWikiImageUrl(fileName, id);
 	}
 	getShipImageUrl(ship: any, id: any): Promise<IFoundResult> {
