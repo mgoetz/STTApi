@@ -1,6 +1,7 @@
 // an implemention of NetworkInterface using the native browser fetch functionality
 import { NetworkInterface } from "./NetworkInterface";
 import 'url-search-params-polyfill';
+import CONFIG from "./CONFIG";
 
 export class NetworkFetch implements NetworkInterface {
 	post(uri: string, form: any, bearerToken: string | undefined = undefined, getjson: boolean = true): Promise<any> {
@@ -58,5 +59,39 @@ export class NetworkFetch implements NetworkInterface {
 		}
 
 		return window.fetch(uri + "?" + searchParams.toString()).then((response: Response) => response.json());
+	}
+
+	getRaw(uri: string, qs: any): Promise<any> {
+		// TODO: this should not be in here (networkfetch should be agnostic of its callers)
+		let headers: any = {
+			'Origin': CONFIG.URL_SERVER,
+			'Referer': CONFIG.URL_SERVER,
+			'Accept': '*/*',
+			'Accept-Encoding': 'gzip, deflate, br'
+		};
+
+		return window.fetch(uri, {
+			method: "get",
+			headers: headers
+		}).then((response: Response) => {
+			if (response && response.body) {
+				var reader = response.body.getReader();
+				let buffers: Buffer[] = [];
+				function getAllData(): Promise<any> {
+					return reader.read().then(function (result) {
+						if (!result.done) {
+							buffers.push(new Buffer(result.value));
+							return getAllData();
+						}
+
+						return Promise.resolve(Buffer.concat(buffers));
+					});
+				}
+
+				return getAllData();
+			}
+
+			return Promise.reject("Fail loading data");
+		});
 	}
 }

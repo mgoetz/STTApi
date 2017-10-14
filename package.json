@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "dexie": "^2.0.1",
+    "ab-parser": "file:./AssetParser",
     "url-search-params-polyfill": "^2.0.1"
   }
 }

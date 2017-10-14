@@ -22,6 +22,7 @@ import { IChallengeSuccess, MinimalComplement } from './MissionCrewSuccess';
 import { mergeDeep } from './ObjectMerge';
 import { ImageProvider, IFoundResult } from './ImageProvider';
 import { WikiImageProvider } from './WikiImageTools';
+import { AssetImageProvider } from './AssetImageProvider';
 import Dexie from "dexie";
 import CONFIG from "./CONFIG";
 
@@ -65,7 +66,7 @@ export class STTApiClass {
 		this._cache = new DexieCache("sttcache");
 
 		// Callers should be able to override the image provider and pass other options to it
-		this._imageProvider = new WikiImageProvider();
+		this._imageProvider = new AssetImageProvider(); //WikiImageProvider();
 	}
 
 	get roster(): any {
@@ -287,10 +288,10 @@ export class STTApiClass {
 
 	loadServerConfig(): Promise<any> {
 		return this.executeGetRequest("config", {
-			platform:'WindowsPlayer',
+			platform:'WebGLPlayer',
 			device_type:'Desktop',
 			client_version:CONFIG.CLIENT_VERSION,
-			platform_folder:'win64'
+			platform_folder:CONFIG.CLIENT_PLATFORM
 		}).then((data: any) => {
 			this._serverConfig = data;
 			console.info("Loaded server config");

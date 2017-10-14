@@ -2,8 +2,6 @@ import STTApi from "./index";
 import CONFIG from "./CONFIG";
 import { ImageProvider, IFoundResult } from './ImageProvider';
 
-export { IFoundResult };
-
 function getWikiImageUrl(fileName: string, id: any): Promise<IFoundResult> {
 	return STTApi.wikiImages.where('fileName').equals(fileName).first((entry: any) => {
 		if (entry) {
