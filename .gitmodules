@@ -1,0 +1,3 @@
+[submodule "AssetParser"]
+	path = AssetParser
+	url = https://github.com/IAmPicard/AssetParser.git
