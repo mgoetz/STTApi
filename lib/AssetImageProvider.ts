@@ -52,7 +52,7 @@ export class AssetImageProvider implements ImageProvider {
     }
 
     getSprite(assetName: string, spriteName: string, id: any): Promise<IFoundResult> {
-        let cachedUrl: string | undefined = this._imageCache.getImage(assetName + '_' + spriteName);
+        let cachedUrl: string | undefined = this._imageCache.getImage(((assetName.length > 0) ? (assetName + '_') : '') + spriteName);
         if (cachedUrl) {
             return Promise.resolve({
                 id: id,
@@ -60,7 +60,7 @@ export class AssetImageProvider implements ImageProvider {
             });
         }
 
-        return STTApi.networkHelper.getRaw(this.baseURLAsset + assetName + '.sd', undefined).then((data: any) => {
+        return STTApi.networkHelper.getRaw(this.baseURLAsset + ((assetName.length > 0) ? assetName : spriteName) + '.sd', undefined).then((data: any) => {
             if (!data) {
                 return Promise.reject('Fail to load image');
             }
@@ -70,15 +70,22 @@ export class AssetImageProvider implements ImageProvider {
                 return Promise.reject('Fail to load image');
             }
 
-            let sprite = assetBundle.sprites.find((sprite: any) => sprite.spriteName == spriteName);
-            if (!sprite) {
-                return Promise.reject('Sprite not found');
+            let pngImage;
+
+            if (assetName.length > 0) {
+                let sprite = assetBundle.sprites.find((sprite: any) => sprite.spriteName == spriteName);
+                if (!sprite) {
+                    return Promise.reject('Sprite not found');
+                }
+                pngImage = rotateAndConvertToPng(sprite.spriteBitmap.data, sprite.spriteBitmap.width, sprite.spriteBitmap.height);
+            }
+            else {
+                pngImage = rotateAndConvertToPng(assetBundle.imageBitmap.data, assetBundle.imageBitmap.width, assetBundle.imageBitmap.height);
             }
 
-            let pngImage = rotateAndConvertToPng(sprite.spriteBitmap.data, sprite.spriteBitmap.width, sprite.spriteBitmap.height);
             return Promise.resolve({
                 id: id,
-                url: this._imageCache.saveImage(assetName + '_' + spriteName, pngImage)
+                url: this._imageCache.saveImage(((assetName.length > 0) ? (assetName + '_') : '') + spriteName, pngImage)
             });
         })
     }

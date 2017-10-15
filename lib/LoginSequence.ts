@@ -152,26 +152,14 @@ export function loginSequence(onProgress: (description: string) => void, loadMis
 
             let iconPromises: Array<Promise<void>> = [];
             for (var sprite in CONFIG.SPRITES) {
-                if (CONFIG.SPRITES[sprite].asset.length > 0) {
-                    iconPromises.push(STTApi.imageProvider.getSprite(CONFIG.SPRITES[sprite].asset, sprite, sprite).then((found: IFoundResult) => {
-                        for (var sprite in CONFIG.SPRITES) {
-                            if (sprite === found.id)
-                                CONFIG.SPRITES[sprite].url = found.url;
-                        }
+                iconPromises.push(STTApi.imageProvider.getSprite(CONFIG.SPRITES[sprite].asset, sprite, sprite).then((found: IFoundResult) => {
+                    for (var sprite in CONFIG.SPRITES) {
+                        if (sprite === found.id)
+                            CONFIG.SPRITES[sprite].url = found.url;
+                    }
 
-                        return Promise.resolve();
-                    }).catch((error: any) => { /*console.warn(error);*/ }));
-                }
-                else {
-                    iconPromises.push(STTApi.imageProvider.getImageUrl(sprite, sprite).then((found: IFoundResult) => {
-                        for (var sprite in CONFIG.SPRITES) {
-                            if (sprite === found.id)
-                                CONFIG.SPRITES[sprite].url = found.url;
-                        }
-
-                        return Promise.resolve();
-                    }).catch((error: any) => { /*console.warn(error);*/ }));
-                }
+                    return Promise.resolve();
+                }).catch((error: any) => { /*console.warn(error);*/ }));
             }
             return Promise.all(iconPromises);
         });
