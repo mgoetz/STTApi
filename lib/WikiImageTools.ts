@@ -86,4 +86,9 @@ export class WikiImageProvider implements ImageProvider {
 	getSprite(assetName: string, spriteName: string, id: any): Promise<IFoundResult> {
 		return Promise.reject('Not implemented');
 	}
+
+	getImageUrl(iconFile: string, id: any): Promise<IFoundResult> {
+		let fileName = iconFile + '.png';
+		return getWikiImageUrl(fileName, id);
+	}
 }

@@ -14,4 +14,5 @@ export interface ImageProvider {
 	getItemImageUrl(item: any, id: any): Promise<IFoundResult>;
 	getFactionImageUrl(faction: any, id: any): Promise<IFoundResult>;
 	getSprite(assetName: string, spriteName: string, id: any): Promise<IFoundResult>;
+	getImageUrl(iconFile: string, id: any): Promise<IFoundResult>;
 }

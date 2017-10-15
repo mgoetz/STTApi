@@ -51,6 +51,27 @@ export default class CONFIG {
 		'mastery_medium_icon': { asset: 'atlas_stt_icons', url: undefined },
 		'mastery_lowest_icon': { asset: 'atlas_stt_icons', url: undefined },
 		'star_reward': { asset: 'atlas_stt_icons', url: undefined },
-		'star_reward_inactive': { asset: 'atlas_stt_icons', url: undefined }
+		'star_reward_inactive': { asset: 'atlas_stt_icons', url: undefined },
+		'fleet_rank_admiral_icon': { asset: 'atlas_stt_icons', url: undefined },
+		'fleet_rank_captain_icon': { asset: 'atlas_stt_icons', url: undefined },
+		'fleet_rank_ensign_icon': { asset: 'atlas_stt_icons', url: undefined },
+		'fleet_rank_lt_icon': { asset: 'atlas_stt_icons', url: undefined },
+		'honor_currency': { asset: 'atlas_stt_icons', url: undefined },
+		'icon_command_skill': { asset: 'atlas_stt_icons', url: undefined },
+		'icon_diplomacy_skill': { asset: 'atlas_stt_icons', url: undefined },
+		'icon_engineering_skill': { asset: 'atlas_stt_icons', url: undefined },
+		'icon_medicine_skill': { asset: 'atlas_stt_icons', url: undefined },
+		'icon_science_skill': { asset: 'atlas_stt_icons', url: undefined },
+		'icon_security_skill': { asset: 'atlas_stt_icons', url: undefined },
+		'icon_shuttle_lg': { asset: 'atlas_stt_icons', url: undefined },
+		'node_icon': { asset: 'atlas_stt_icons', url: undefined },
+		'pe_currency_icon': { asset: 'atlas_stt_icons', url: undefined },  // merits
+		'pp_currency_icon': { asset: 'atlas_stt_icons', url: undefined }, // dilithium
+		'soft_currency_icon': { asset: 'atlas_stt_icons', url: undefined }, // credits
+		'victory_point_icon': { asset: 'atlas_stt_icons', url: undefined },
+		'images_currency_honor_currency_0': { asset: '', url: undefined },
+		'images_currency_pe_currency_0': { asset: '', url: undefined },
+		'images_currency_pp_currency_0': { asset: '', url: undefined },
+		'images_currency_sc_currency_0': { asset: '', url: undefined }
 	};
 }

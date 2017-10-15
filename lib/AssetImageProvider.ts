@@ -83,7 +83,7 @@ export class AssetImageProvider implements ImageProvider {
         })
     }
 
-    private getImageUrl(iconFile: string, id: any): Promise<IFoundResult> {
+    getImageUrl(iconFile: string, id: any): Promise<IFoundResult> {
         let cachedUrl: string | undefined = this._imageCache.getImage(iconFile);
         if (cachedUrl) {
             return Promise.resolve({
