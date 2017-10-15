@@ -66,17 +66,24 @@ export class WikiImageProvider implements ImageProvider {
 		let fileName = crew.name.split(' ').join('_') + (fullBody ? '' : '_Head') + '.png';
 		return getWikiImageUrl(fileName, id);
 	}
+
 	getShipImageUrl(ship: any, id: any): Promise<IFoundResult> {
 		let fileName = ship.name.split(' ').join('_').split('.').join('').split('\'').join('') + '.png';
 		return getWikiImageUrl(fileName, id);
 	}
+
 	getItemImageUrl(item: any, id: any): Promise<IFoundResult> {
 		var fileName = item.name + CONFIG.RARITIES[item.rarity].name + '.png';
 		fileName = fileName.split(' ').join('').split('\'').join('');
 		return getWikiImageUrl(fileName, id);
 	}
+
 	getFactionImageUrl(faction: any, id: any): Promise<IFoundResult> {
 		let fileName = 'Icon' + faction.name.split(' ').join('') + '.png';
 		return getWikiImageUrl(fileName, id);
+	}
+
+	getSprite(assetName: string, spriteName: string, id: any): Promise<IFoundResult> {
+		return Promise.reject('Not implemented');
 	}
 }

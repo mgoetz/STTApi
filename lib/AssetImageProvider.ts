@@ -17,7 +17,10 @@ export class DummyImageCache implements ImageCache {
 export class AssetImageProvider implements ImageProvider {
     private _imageCache: ImageCache;
 
+    private baseURLAsset: string;
+
     constructor(imageCache: ImageCache|undefined) {
+        this.baseURLAsset = STTApi.serverConfig.config.asset_server + 'bundles/' + CONFIG.CLIENT_PLATFORM + '/default/' + CONFIG.CLIENT_VERSION + '/' + STTApi.serverConfig.config.asset_bundle_version + '/';
         if (imageCache) {
             this._imageCache = imageCache;
         }
@@ -40,6 +43,38 @@ export class AssetImageProvider implements ImageProvider {
 
     getFactionImageUrl(faction: any, id: any): Promise<IFoundResult> {
         return this.getImageUrl(faction.icon.file, id); //faction.reputation_item_icon.file and faction.shuttle_token_preview_item.icon.file
+    }
+
+    getSprite(assetName: string, spriteName: string, id: any): Promise<IFoundResult> {
+        let cachedUrl: string | undefined = this._imageCache.getImage(assetName + '_' + spriteName);
+        if (cachedUrl) {
+            return Promise.resolve({
+                id: id,
+                url: cachedUrl
+            });
+        }
+
+        return STTApi.networkHelper.getRaw(this.baseURLAsset + assetName + '.sd', undefined).then((data: any) => {
+            if (!data) {
+                return Promise.reject('Fail to load image');
+            }
+    
+            let assetBundle = parseAssetBundle(data);
+            if (!assetBundle || !assetBundle.imageBitmap) {
+                return Promise.reject('Fail to load image');
+            }
+
+            let sprite = assetBundle.sprites.find((sprite: any) => sprite.spriteName == spriteName);
+            if (!sprite) {
+                return Promise.reject('Sprite not found');
+            }
+
+            let pngImage = rotateAndConvertToPng(sprite.spriteBitmap.data, sprite.spriteBitmap.width, sprite.spriteBitmap.height);
+            return Promise.resolve({
+                id: id,
+                url: this._imageCache.saveImage(assetName + '_' + spriteName, pngImage)
+            });
+        })
     }
 
     private getImageUrl(iconFile: string, id: any): Promise<IFoundResult> {
@@ -79,7 +114,6 @@ export class AssetImageProvider implements ImageProvider {
     }
 
     private getAssetUrl(iconFile: string): string {
-        let urlAsset = STTApi.serverConfig.config.asset_server + 'bundles/' + CONFIG.CLIENT_PLATFORM + '/default/' + CONFIG.CLIENT_VERSION + '/' + STTApi.serverConfig.config.asset_bundle_version + '/';
-        return urlAsset + 'images' + iconFile.replace(new RegExp('/', 'g'), '_');
+        return this.baseURLAsset + 'images' + iconFile.replace(new RegExp('/', 'g'), '_');
     }
 }
