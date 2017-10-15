@@ -16,18 +16,24 @@ export class DummyImageCache implements ImageCache {
 
 export class AssetImageProvider implements ImageProvider {
     private _imageCache: ImageCache;
-
-    private baseURLAsset: string;
+    private _baseURLAsset: string;
 
     constructor(imageCache: ImageCache|undefined) {
-        this.baseURLAsset = STTApi.serverConfig.config.asset_server + 'bundles/' + CONFIG.CLIENT_PLATFORM + '/default/' + CONFIG.CLIENT_VERSION + '/' + STTApi.serverConfig.config.asset_bundle_version + '/';
         if (imageCache) {
             this._imageCache = imageCache;
         }
         else {
             this._imageCache = new DummyImageCache();
         }
+        this._baseURLAsset = '';
     }
+
+    get baseURLAsset(): string {
+        if (this._baseURLAsset.length == 0) {
+            this._baseURLAsset = STTApi.serverConfig.config.asset_server + 'bundles/' + CONFIG.CLIENT_PLATFORM + '/default/' + CONFIG.CLIENT_VERSION + '/' + STTApi.serverConfig.config.asset_bundle_version + '/';
+        }
+		return this._baseURLAsset;
+	}
 
     getCrewImageUrl(crew: any, fullBody: boolean, id: any): Promise<IFoundResult> {
         return this.getImageUrl(fullBody ? crew.full_body.file : crew.portrait.file, id);
