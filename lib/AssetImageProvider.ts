@@ -4,25 +4,26 @@ import { ImageProvider, ImageCache, IFoundResult } from './ImageProvider';
 
 import { parseAssetBundle, rotateAndConvertToPng } from 'ab-parser';
 
-//import * as fs from 'fs';
-
 export class DummyImageCache implements ImageCache {
     getImage(url: string): string | undefined {
         return undefined;
     }
 
     saveImage(url: string, data: Buffer): string {
-        //fs.writeFileSync('./' + url + '.png', data);
-        //return './' + url + '.png';
-        return "dummy";
+        return "data:image/png;base64," + data.toString('base64');
     }
 }
 
 export class AssetImageProvider implements ImageProvider {
     private _imageCache: ImageCache;
 
-    constructor() {
-        this._imageCache = new DummyImageCache();
+    constructor(imageCache: ImageCache|undefined) {
+        if (imageCache) {
+            this._imageCache = imageCache;
+        }
+        else {
+            this._imageCache = new DummyImageCache();
+        }
     }
 
     getCrewImageUrl(crew: any, fullBody: boolean, id: any): Promise<IFoundResult> {

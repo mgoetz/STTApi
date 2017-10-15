@@ -20,7 +20,7 @@ import { NetworkFetch } from "./NetworkFetch";
 import { DexieCache, QuestsTable, ImmortalsTable, ConfigTable, WikiImageTable } from "./Cache";
 import { IChallengeSuccess, MinimalComplement } from './MissionCrewSuccess';
 import { mergeDeep } from './ObjectMerge';
-import { ImageProvider, IFoundResult } from './ImageProvider';
+import { ImageProvider, ImageCache, IFoundResult } from './ImageProvider';
 import { WikiImageProvider } from './WikiImageTools';
 import { AssetImageProvider } from './AssetImageProvider';
 import Dexie from "dexie";
@@ -64,9 +64,15 @@ export class STTApiClass {
 
 		// TODO: Dexie uses IndexedDB, so doesn't work in plain node.js without polyfill - should the caching be an interface?
 		this._cache = new DexieCache("sttcache");
+	}
 
-		// Callers should be able to override the image provider and pass other options to it
-		this._imageProvider = new AssetImageProvider(); //WikiImageProvider();
+	setImageProvider(useAssets: boolean, imageCache: ImageCache|undefined) {
+		if (useAssets) {
+			this._imageProvider = new AssetImageProvider(imageCache);
+		}
+		else {
+			this._imageProvider = new WikiImageProvider();
+		}
 	}
 
 	get roster(): any {

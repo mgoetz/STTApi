@@ -3,6 +3,7 @@ export { mergeDeep } from './ObjectMerge';
 export { loginSequence } from './LoginSequence';
 export { loadFullTree } from './EquipmentTools';
 export { loadGauntlet, gauntletCrewSelection, gauntletRoundOdds, payToGetNewOpponents, playContest } from './GauntletTools';
+export { ImageCache } from './ImageProvider';
 
 import { STTApiClass } from "./STTApi";
 let STTApi = new STTApiClass();
