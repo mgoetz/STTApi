@@ -69,7 +69,8 @@ export default class CONFIG {
 		'pp_currency_icon': { asset: 'atlas_stt_icons', url: undefined }, // dilithium
 		'soft_currency_icon': { asset: 'atlas_stt_icons', url: undefined }, // credits
 		'victory_point_icon': { asset: 'atlas_stt_icons', url: undefined },
-		'energy_icon': { asset: 'atlas_stt_icons', url: undefined },
+		'energy_icon': { asset: 'atlas_stt_icons', url: undefined }, // chronitons
+		'cadet_icon': { asset: 'atlas_stt_icons', url: undefined }, // cadet
 		'images_currency_honor_currency_0': { asset: '', url: undefined },
 		'images_currency_pe_currency_0': { asset: '', url: undefined },
 		'images_currency_pp_currency_0': { asset: '', url: undefined },
