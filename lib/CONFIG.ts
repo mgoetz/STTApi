@@ -45,4 +45,12 @@ export default class CONFIG {
 		'diplomacy_skill': { name: 'Diplomacy', url: 'https://stt.wiki/w/images/thumb/5/58/DIP.png/18px-DIP.png', urlBig: 'https://stt.wiki/w/images/5/58/DIP.png' },
 		'medicine_skill': { name: 'Medicine', url: 'https://stt.wiki/w/images/thumb/5/56/MED.png/18px-MED.png', urlBig: 'https://stt.wiki/w/images/5/56/MED.png' }
 	};
+
+	static SPRITES: { [index: string]: { asset: string, url: string|undefined } } = {
+		'mastery_highest_icon': { asset: 'atlas_stt_icons', url: undefined },
+		'mastery_medium_icon': { asset: 'atlas_stt_icons', url: undefined },
+		'mastery_lowest_icon': { asset: 'atlas_stt_icons', url: undefined },
+		'star_reward': { asset: 'atlas_stt_icons', url: undefined },
+		'star_reward_inactive': { asset: 'atlas_stt_icons', url: undefined }
+	};
 }

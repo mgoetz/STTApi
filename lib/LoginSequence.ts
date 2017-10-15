@@ -147,6 +147,21 @@ export function loginSequence(onProgress: (description: string) => void, loadMis
                 }).catch((error: any) => { /*console.warn(error);*/ }));
             });
             return Promise.all(iconPromises);
+        }).then(() => {
+            onProgress('Finding other images...');
+
+            let iconPromises: Array<Promise<void>> = [];
+            for (var sprite in CONFIG.SPRITES) {
+                iconPromises.push(STTApi.imageProvider.getSprite(CONFIG.SPRITES[sprite].asset, sprite, sprite).then((found: IFoundResult) => {
+                    for (var sprite in CONFIG.SPRITES) {
+                        if (sprite === found.id)
+                            CONFIG.SPRITES[sprite].url = found.url;
+                    }
+
+                    return Promise.resolve();
+                }).catch((error: any) => { /*console.warn(error);*/ }));
+            }
+            return Promise.all(iconPromises);
         });
     });
 
