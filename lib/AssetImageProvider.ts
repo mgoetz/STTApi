@@ -51,26 +51,35 @@ export class AssetImageProvider implements ImageProvider {
             });
         }
 
-        return STTApi.networkHelper.getRaw(this.getAssetUrl(iconFile), undefined).then((data: any) => {
-            if (!data) {
-                return Promise.reject('Fail to load image');
-            }
-
-            let assetBundle = parseAssetBundle(data);
-            if (!assetBundle || !assetBundle.imageBitmap) {
-                return Promise.reject('Fail to load image');
-            }
-
-            let pngImage = rotateAndConvertToPng(assetBundle.imageBitmap.data, assetBundle.imageBitmap.width, assetBundle.imageBitmap.height);
-            return Promise.resolve({
-                id: id,
-                url: this._imageCache.saveImage(iconFile, pngImage)
+        // Most assets have the .sd extensions, a few have the .ld extension; this is available in asset_bundles but I can't extract that in JavaScript
+        return STTApi.networkHelper.getRaw(this.getAssetUrl(iconFile) + '.sd', undefined).then((data: any) => {
+            return this.processData(iconFile, id, data);
+        }).catch((error) => {
+			return STTApi.networkHelper.getRaw(this.getAssetUrl(iconFile) + '.ld', undefined).then((data: any) => {
+                return this.processData(iconFile, id, data);
             });
+		});
+    }
+
+    private processData(iconFile: string, id: any, data: any): Promise<IFoundResult> {
+        if (!data) {
+            return Promise.reject('Fail to load image');
+        }
+
+        let assetBundle = parseAssetBundle(data);
+        if (!assetBundle || !assetBundle.imageBitmap) {
+            return Promise.reject('Fail to load image');
+        }
+
+        let pngImage = rotateAndConvertToPng(assetBundle.imageBitmap.data, assetBundle.imageBitmap.width, assetBundle.imageBitmap.height);
+        return Promise.resolve({
+            id: id,
+            url: this._imageCache.saveImage(iconFile, pngImage)
         });
     }
 
     private getAssetUrl(iconFile: string): string {
         let urlAsset = STTApi.serverConfig.config.asset_server + 'bundles/' + CONFIG.CLIENT_PLATFORM + '/default/' + CONFIG.CLIENT_VERSION + '/' + STTApi.serverConfig.config.asset_bundle_version + '/';
-        return urlAsset + 'images' + iconFile.replace(new RegExp('/', 'g'), '_') + '.sd';
+        return urlAsset + 'images' + iconFile.replace(new RegExp('/', 'g'), '_');
     }
 }
