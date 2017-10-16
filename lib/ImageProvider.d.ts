@@ -4,8 +4,8 @@ export interface IFoundResult {
 }
 
 export interface ImageCache {
-	getImage(url: string): string|undefined;
-	saveImage(url: string, data: Buffer): string;
+	getImage(url: string): Promise<string|undefined>;
+	saveImage(url: string, data: Buffer): Promise<string>;
 }
 
 export interface ImageProvider {
