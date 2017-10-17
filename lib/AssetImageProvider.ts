@@ -133,6 +133,6 @@ export class AssetImageProvider implements ImageProvider {
     }
 
     private getAssetUrl(iconFile: string): string {
-        return this.baseURLAsset + 'images' + iconFile.replace(new RegExp('/', 'g'), '_');
+        return this.baseURLAsset + 'images' + iconFile.replace(new RegExp('/', 'g'), '_').replace('.png', '');
     }
 }
