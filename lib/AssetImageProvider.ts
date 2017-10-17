@@ -1,6 +1,7 @@
 import STTApi from "./index";
 import CONFIG from "./CONFIG";
 import { ImageProvider, ImageCache, IFoundResult } from './ImageProvider';
+import { WorkerPool, WorkerTask } from './WorkerPool';
 
 import { parseAssetBundle, rotateAndConvertToPng } from 'ab-parser';
 
@@ -17,6 +18,7 @@ export class DummyImageCache implements ImageCache {
 export class AssetImageProvider implements ImageProvider {
     private _imageCache: ImageCache;
     private _baseURLAsset: string;
+    private _workerPool: WorkerPool
 
     constructor(imageCache: ImageCache | undefined) {
         if (imageCache) {
@@ -25,6 +27,7 @@ export class AssetImageProvider implements ImageProvider {
         else {
             this._imageCache = new DummyImageCache();
         }
+        this._workerPool = new WorkerPool(8); //TODO: can we get the number of cores somehow?
         this._baseURLAsset = '';
     }
 
@@ -113,21 +116,23 @@ export class AssetImageProvider implements ImageProvider {
         });
     }
 
+    private spawnWorker(data: any): Promise<any> {
+        return new Promise<any>((resolve, reject) => {
+            this._workerPool.addWorkerTask({data, resolve});
+        });
+    }
+
     private processData(iconFile: string, id: any, data: any): Promise<IFoundResult> {
         if (!data) {
             return Promise.reject('Fail to load image');
         }
 
-        let assetBundle = parseAssetBundle(data);
-        if (!assetBundle || !assetBundle.imageBitmap) {
-            return Promise.reject('Fail to load image');
-        }
-
-        let pngImage = rotateAndConvertToPng(assetBundle.imageBitmap.data, assetBundle.imageBitmap.width, assetBundle.imageBitmap.height);
-        return this._imageCache.saveImage(iconFile, pngImage).then((url: string) => {
-            return Promise.resolve({
-                id: id,
-                url: url
+        return this.spawnWorker(data).then((pngImage: any) => {
+            return this._imageCache.saveImage(iconFile, pngImage).then((url: string) => {
+                return Promise.resolve({
+                    id: id,
+                    url: url
+                });
             });
         });
     }
