@@ -51,119 +51,131 @@ export function loginSequence(onProgress: (description: string) => void, loadMis
             return cur.loader();
         });
     }, Promise.resolve())
-    .then(() => {
-        if (STTApi.playerData.fleet && STTApi.playerData.fleet.id != 0) {
-            return fleetResources.reduce((prev, cur) => {
-                return prev.then(() => {
-                    onProgress('Loading ' + cur.description + '...');
-                    return cur.loader(STTApi.playerData.fleet.id);
+        .then(() => {
+            if (STTApi.playerData.fleet && STTApi.playerData.fleet.id != 0) {
+                return fleetResources.reduce((prev, cur) => {
+                    return prev.then(() => {
+                        onProgress('Loading ' + cur.description + '...');
+                        return cur.loader(STTApi.playerData.fleet.id);
+                    });
+                }, Promise.resolve());
+            }
+            else {
+                return Promise.resolve();
+            }
+        })
+        .then(() => {
+            onProgress('Analyzing crew...');
+
+            return matchCrew(STTApi.playerData.character).then((roster: any) => {
+                STTApi.roster = roster;
+                roster.forEach((crew: any) => {
+                    crew.iconUrl = '';
+                    crew.iconBodyUrl = '';
                 });
-            }, Promise.resolve());
-        }
-        else {
-            return Promise.resolve();
-        }
-    })
-    .then(() => {
-        onProgress('Analyzing crew...');
 
-        return matchCrew(STTApi.playerData.character).then((roster: any) => {
-            STTApi.roster = roster;
-            roster.forEach((crew: any) => {
-                crew.iconUrl = '';
-                crew.iconBodyUrl = '';
-            });
-
-            onProgress('Finding crew images...');
-            let iconPromises: Array<Promise<void>> = [];
-            roster.forEach((crew: any) => {
-                iconPromises.push(STTApi.imageProvider.getCrewImageUrl(crew, false, crew.id).then((found: IFoundResult) => {
-                    STTApi.roster.forEach((crew: any) => {
-                        if (crew.id === found.id)
-                            crew.iconUrl = found.url;
-                    });
-
-                    return Promise.resolve();
-                }).catch((error: any) => { /*console.warn(error);*/ }));
-                iconPromises.push(STTApi.imageProvider.getCrewImageUrl(crew, true, crew.id).then((found: IFoundResult) => {
-                    STTApi.roster.forEach((crew: any) => {
-                        if (crew.id === found.id)
-                            crew.iconBodyUrl = found.url;
-                    });
-
-                    return Promise.resolve();
-                }).catch((error: any) => { /*console.warn(error);*/ }));
-            });
-
-            // Also load the avatars for crew not in the roster
-            STTApi.crewAvatars.forEach((crew: any) => {
-                iconPromises.push(STTApi.imageProvider.getCrewImageUrl(crew, false, crew.id).then((found: IFoundResult) => {
-                    STTApi.crewAvatars.forEach((crew: any) => {
-                        if (crew.id === found.id)
-                            crew.iconUrl = found.url;
-                    });
-
-                    return Promise.resolve();
-                }).catch((error: any) => { /*console.warn(error);*/ }));
-            });
-
-            return Promise.all(iconPromises);
-        }).then(() => {
-            onProgress('Loading ships...');
-
-            return matchShips(STTApi.playerData.character.ships).then((ships: any) => {
-                STTApi.ships = ships;
-
-                onProgress('Finding ship images...');
+                let total = roster.length * 2 + STTApi.crewAvatars.length;
+                let current = 0;
+                onProgress('Caching crew images... (' + current + '/' + total + ')');
                 let iconPromises: Array<Promise<void>> = [];
-                ships.forEach((ship: any) => {
-                    iconPromises.push(STTApi.imageProvider.getShipImageUrl(ship, ship.name).then((found: IFoundResult) => {
-                        STTApi.ships.forEach((ship: any) => {
-                            if (ship.name === found.id)
-                                ship.iconUrl = found.url;
+                roster.forEach((crew: any) => {
+                    iconPromises.push(STTApi.imageProvider.getCrewImageUrl(crew, false, crew.id).then((found: IFoundResult) => {
+                        onProgress('Caching crew images... (' + current++ + '/' + total + ')');
+                        STTApi.roster.forEach((crew: any) => {
+                            if (crew.id === found.id)
+                                crew.iconUrl = found.url;
+                        });
+
+                        return Promise.resolve();
+                    }).catch((error: any) => { /*console.warn(error);*/ }));
+                    iconPromises.push(STTApi.imageProvider.getCrewImageUrl(crew, true, crew.id).then((found: IFoundResult) => {
+                        onProgress('Caching crew images... (' + current++ + '/' + total + ')');
+                        STTApi.roster.forEach((crew: any) => {
+                            if (crew.id === found.id)
+                                crew.iconBodyUrl = found.url;
+                        });
+
+                        return Promise.resolve();
+                    }).catch((error: any) => { /*console.warn(error);*/ }));
+                });
+
+                // Also load the avatars for crew not in the roster
+                STTApi.crewAvatars.forEach((crew: any) => {
+                    iconPromises.push(STTApi.imageProvider.getCrewImageUrl(crew, false, crew.id).then((found: IFoundResult) => {
+                        onProgress('Caching crew images... (' + current++ + '/' + total + ')');
+                        STTApi.crewAvatars.forEach((crew: any) => {
+                            if (crew.id === found.id)
+                                crew.iconUrl = found.url;
+                        });
+
+                        return Promise.resolve();
+                    }).catch((error: any) => { /*console.warn(error);*/ }));
+                });
+
+                return Promise.all(iconPromises);
+            }).then(() => {
+                onProgress('Loading ships...');
+
+                return matchShips(STTApi.playerData.character.ships).then((ships: any) => {
+                    STTApi.ships = ships;
+
+                    let total = ships.length;
+                    let current = 0;
+                    onProgress('Caching ship images... (' + current + '/' + total + ')');
+                    let iconPromises: Array<Promise<void>> = [];
+                    ships.forEach((ship: any) => {
+                        iconPromises.push(STTApi.imageProvider.getShipImageUrl(ship, ship.name).then((found: IFoundResult) => {
+                            onProgress('Caching ship images... (' + current++ + '/' + total + ')');
+                            STTApi.ships.forEach((ship: any) => {
+                                if (ship.name === found.id)
+                                    ship.iconUrl = found.url;
+                            });
+
+                            return Promise.resolve();
+                        }).catch((error: any) => { /*console.warn(error);*/ }));
+                    });
+                    return Promise.all(iconPromises);
+                });
+            }).then(() => {
+                let total = STTApi.playerData.character.items.length;
+                let current = 0;
+                onProgress('Caching item images... (' + current + '/' + total + ')');
+                let iconPromises: Array<Promise<void>> = [];
+                STTApi.playerData.character.items.forEach((item: any) => {
+                    item.iconUrl = CONFIG.DEFAULT_ITEM_ICON;
+                    item.typeName = item.icon.file.replace("/items", "").split("/")[1];
+                    item.symbol = item.icon.file.replace("/items", "").split("/")[2];
+
+                    iconPromises.push(STTApi.imageProvider.getItemImageUrl(item, item.id).then((found: IFoundResult) => {
+                        onProgress('Caching item images... (' + current++ + '/' + total + ')');
+                        STTApi.playerData.character.items.forEach((item: any) => {
+                            if (item.id === found.id)
+                                item.iconUrl = found.url;
                         });
 
                         return Promise.resolve();
                     }).catch((error: any) => { /*console.warn(error);*/ }));
                 });
                 return Promise.all(iconPromises);
+            }).then(() => {
+                let total = CONFIG.SPRITES.length;
+                let current = 0;
+                onProgress('Caching misc images... (' + current + '/' + total + ')');
+                let iconPromises: Array<Promise<void>> = [];
+                for (var sprite in CONFIG.SPRITES) {
+                    iconPromises.push(STTApi.imageProvider.getSprite(CONFIG.SPRITES[sprite].asset, sprite, sprite).then((found: IFoundResult) => {
+                        onProgress('Caching misc images... (' + current++ + '/' + total + ')');
+                        for (var sprite in CONFIG.SPRITES) {
+                            if (sprite === found.id)
+                                CONFIG.SPRITES[sprite].url = found.url;
+                        }
+
+                        return Promise.resolve();
+                    }).catch((error: any) => { /*console.warn(error);*/ }));
+                }
+                return Promise.all(iconPromises);
             });
-        }).then(() => {
-            onProgress('Finding item images...');
-
-            let iconPromises: Array<Promise<void>> = [];
-            STTApi.playerData.character.items.forEach((item: any) => {
-                item.iconUrl = CONFIG.DEFAULT_ITEM_ICON;
-				item.typeName = item.icon.file.replace("/items", "").split("/")[1];
-				item.symbol = item.icon.file.replace("/items", "").split("/")[2];
-
-                iconPromises.push(STTApi.imageProvider.getItemImageUrl(item, item.id).then((found: IFoundResult) => {
-                    STTApi.playerData.character.items.forEach((item: any) => {
-                        if (item.id === found.id)
-                            item.iconUrl = found.url;
-                    });
-
-                    return Promise.resolve();
-                }).catch((error: any) => { /*console.warn(error);*/ }));
-            });
-            return Promise.all(iconPromises);
-        }).then(() => {
-            onProgress('Finding other images...');
-
-            let iconPromises: Array<Promise<void>> = [];
-            for (var sprite in CONFIG.SPRITES) {
-                iconPromises.push(STTApi.imageProvider.getSprite(CONFIG.SPRITES[sprite].asset, sprite, sprite).then((found: IFoundResult) => {
-                    for (var sprite in CONFIG.SPRITES) {
-                        if (sprite === found.id)
-                            CONFIG.SPRITES[sprite].url = found.url;
-                    }
-
-                    return Promise.resolve();
-                }).catch((error: any) => { /*console.warn(error);*/ }));
-            }
-            return Promise.all(iconPromises);
         });
-    });
 
     if (loadMissions) {
         return promise.then(() => {

@@ -7,7 +7,7 @@ function parseAndConvertToPng(data: any): any {
         return [];
     }
     else {
-        if (data.assetName.length > 0) {
+        if (data.assetName && data.assetName.length > 0) {
             let sprite = assetBundle.sprites.find((sprite: any) => sprite.spriteName == data.spriteName);
             if (!sprite) {
                 console.error('Sprite not found!');
