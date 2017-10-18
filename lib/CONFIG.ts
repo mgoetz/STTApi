@@ -23,8 +23,6 @@ export default class CONFIG {
 	// releases URL
 	static readonly URL_GITHUBRELEASES: string = "https://api.github.com/repos/IAmPicard/StarTrekTimelinesSpreadsheet/releases";
 
-	static readonly DEFAULT_ITEM_ICON: string = 'https://stt.wiki/w/images/d/d6/ItemNameBasic.png';
-
 	// Every 10 days, check the wiki again for updated / new images
 	static readonly HOURS_TO_RECOVERY: number = 24 * 10;
 
@@ -37,13 +35,13 @@ export default class CONFIG {
 		{ name: 'Legendary', color: rgbToHex(253, 210, 106) }
 	];
 
-	static readonly SKILLS: { [index: string]: { name: string, url: string, urlBig: string } } = {
-		'command_skill': { name: 'Command', url: 'https://stt.wiki/w/images/thumb/6/6d/CMD.png/18px-CMD.png', urlBig: 'https://stt.wiki/w/images/6/6d/CMD.png' },
-		'science_skill': { name: 'Science', url: 'https://stt.wiki/w/images/thumb/b/ba/SCI.png/18px-SCI.png', urlBig: 'https://stt.wiki/w/images/b/ba/SCI.png' },
-		'security_skill': { name: 'Security', url: 'https://stt.wiki/w/images/thumb/c/c9/SEC.png/18px-SEC.png', urlBig: 'https://stt.wiki/w/images/c/c9/SEC.png' },
-		'engineering_skill': { name: 'Engineering', url: 'https://stt.wiki/w/images/thumb/8/8b/ENG.png/18px-ENG.png', urlBig: 'https://stt.wiki/w/images/8/8b/ENG.png' },
-		'diplomacy_skill': { name: 'Diplomacy', url: 'https://stt.wiki/w/images/thumb/5/58/DIP.png/18px-DIP.png', urlBig: 'https://stt.wiki/w/images/5/58/DIP.png' },
-		'medicine_skill': { name: 'Medicine', url: 'https://stt.wiki/w/images/thumb/5/56/MED.png/18px-MED.png', urlBig: 'https://stt.wiki/w/images/5/56/MED.png' }
+	static readonly SKILLS: { [index: string]: string } = {
+		'command_skill': 'Command',
+		'science_skill': 'Science',
+		'security_skill': 'Security',
+		'engineering_skill': 'Engineering',
+		'diplomacy_skill': 'Diplomacy',
+		'medicine_skill': 'Medicine'
 	};
 
 	static SPRITES: { [index: string]: { asset: string, url: string|undefined } } = {

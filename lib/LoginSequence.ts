@@ -142,7 +142,7 @@ export function loginSequence(onProgress: (description: string) => void, loadMis
                 onProgress('Caching item images... (' + current + '/' + total + ')');
                 let iconPromises: Array<Promise<void>> = [];
                 STTApi.playerData.character.items.forEach((item: any) => {
-                    item.iconUrl = CONFIG.DEFAULT_ITEM_ICON;
+                    item.iconUrl = '';
                     item.typeName = item.icon.file.replace("/items", "").split("/")[1];
                     item.symbol = item.icon.file.replace("/items", "").split("/")[2];
 
