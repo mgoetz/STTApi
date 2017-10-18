@@ -1,4 +1,4 @@
-import { parseAssetBundle, rotateAndConvertToPng } from 'ab-parser';
+import { parseAssetBundle } from 'ab-parser';
 
 function parseAndConvertToPng(data: any): any {
     let assetBundle = parseAssetBundle(data);
@@ -7,7 +7,7 @@ function parseAndConvertToPng(data: any): any {
         return [];
     }
     else {
-        return rotateAndConvertToPng(assetBundle.imageBitmap.data, assetBundle.imageBitmap.width, assetBundle.imageBitmap.height);
+        return assetBundle.imageBitmap; //rotateAndConvertToPng(assetBundle.imageBitmap.data, assetBundle.imageBitmap.width, assetBundle.imageBitmap.height);
     }
 }
 
