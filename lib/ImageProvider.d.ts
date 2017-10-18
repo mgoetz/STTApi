@@ -3,9 +3,15 @@ export interface IFoundResult {
 	url: string | undefined;
 }
 
+export interface IBitmap {
+	width: number;
+	height: number;
+	data: Uint8Array;
+}
+
 export interface ImageCache {
 	getImage(url: string): Promise<string|undefined>;
-	saveImage(url: string, data: Buffer): Promise<string>;
+	saveImage(url: string, data: IBitmap): Promise<string>;
 }
 
 export interface ImageProvider {

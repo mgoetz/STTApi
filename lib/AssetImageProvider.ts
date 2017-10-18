@@ -1,6 +1,6 @@
 import STTApi from "./index";
 import CONFIG from "./CONFIG";
-import { ImageProvider, ImageCache, IFoundResult } from './ImageProvider';
+import { ImageProvider, ImageCache, IBitmap, IFoundResult } from './ImageProvider';
 import { WorkerPool, WorkerTask } from './WorkerPool';
 
 import { parseAssetBundle, rotateAndConvertToPng } from 'ab-parser';
@@ -10,8 +10,8 @@ export class DummyImageCache implements ImageCache {
         return Promise.resolve(undefined);
     }
 
-    saveImage(url: string, data: Buffer): Promise<string> {
-        return Promise.resolve("data:image/png;base64," + data.toString('base64'));
+    saveImage(url: string, data: IBitmap): Promise<string> {
+        return Promise.resolve("data:image/png;base64," + new Buffer(data.data).toString('base64'));
     }
 }
 
