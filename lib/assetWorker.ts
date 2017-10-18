@@ -1,13 +1,23 @@
 import { parseAssetBundle } from 'ab-parser';
 
 function parseAndConvertToPng(data: any): any {
-    let assetBundle = parseAssetBundle(new Uint8Array(data));
+    let assetBundle = parseAssetBundle(new Uint8Array(data.buffer));
     if (!assetBundle || !assetBundle.imageBitmap) {
         console.error('Fail to parse an image out of this bundle!');
         return [];
     }
     else {
-        return assetBundle.imageBitmap;
+        if (data.assetName.length > 0) {
+            let sprite = assetBundle.sprites.find((sprite: any) => sprite.spriteName == data.spriteName);
+            if (!sprite) {
+                console.error('Sprite not found!');
+                return [];
+            }
+            return sprite.spriteBitmap;
+        }
+        else {
+            return assetBundle.imageBitmap;
+        }
     }
 }
 

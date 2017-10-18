@@ -1,11 +1,11 @@
-export class WorkerTask
-{
+export class WorkerTask {
     data: any;
+    assetName: string | undefined;
+    spriteName: string | undefined;
     resolve: (value: any) => void;
 }
 
-export class WorkerThread
-{
+export class WorkerThread {
     private parentPool: WorkerPool;
     private workerTask: WorkerTask;
 
@@ -21,7 +21,11 @@ export class WorkerThread
             this.workerTask.resolve(message.data);
             this.workerDone();
         });
-        worker.postMessage(workerTask.data.buffer, [workerTask.data.buffer]);
+        worker.postMessage({
+            buffer: workerTask.data.buffer,
+            assetName: workerTask.assetName,
+            spriteName: workerTask.spriteName
+        },[workerTask.data.buffer]);
     }
 
     workerDone() {
@@ -30,8 +34,7 @@ export class WorkerThread
     }
 }
 
-export class WorkerPool
-{
+export class WorkerPool {
     private workerQueue: WorkerThread[];
     private taskQueue: WorkerTask[];
     AssetWorker: any;
@@ -41,7 +44,7 @@ export class WorkerPool
         this.workerQueue = new Array<WorkerThread>();
         this.taskQueue = new Array<WorkerTask>();
 
-        for (var i = 0 ; i < size ; i++) {
+        for (var i = 0; i < size; i++) {
             this.workerQueue.push(new WorkerThread(this));
         }
     }

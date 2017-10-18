@@ -68,28 +68,14 @@ export class AssetImageProvider implements ImageProvider {
                     return Promise.reject('Fail to load image');
                 }
 
-                let assetBundle = parseAssetBundle(data);
-                if (!assetBundle || !assetBundle.imageBitmap) {
-                    return Promise.reject('Fail to load image');
-                }
-
-                let pngImage;
-
-                if (assetName.length > 0) {
-                    let sprite = assetBundle.sprites.find((sprite: any) => sprite.spriteName == spriteName);
-                    if (!sprite) {
-                        return Promise.reject('Sprite not found');
-                    }
-                    pngImage = rotateAndConvertToPng(sprite.spriteBitmap.data, sprite.spriteBitmap.width, sprite.spriteBitmap.height);
-                }
-                else {
-                    pngImage = rotateAndConvertToPng(assetBundle.imageBitmap.data, assetBundle.imageBitmap.width, assetBundle.imageBitmap.height);
-                }
-
-                return this._imageCache.saveImage(((assetName.length > 0) ? (assetName + '_') : '') + spriteName, pngImage).then((url: string) => {
-                    return Promise.resolve({
-                        id: id,
-                        url: url
+                return new Promise<any>((resolve, reject) => {
+                    this._workerPool.addWorkerTask({ data, resolve, assetName, spriteName });
+                }).then((rawBitmap: any) => {
+                    return this._imageCache.saveImage(((assetName.length > 0) ? (assetName + '_') : '') + spriteName, rawBitmap).then((url: string) => {
+                        return Promise.resolve({
+                            id: id,
+                            url: url
+                        });
                     });
                 });
             });
@@ -116,19 +102,15 @@ export class AssetImageProvider implements ImageProvider {
         });
     }
 
-    private spawnWorker(data: any): Promise<any> {
-        return new Promise<any>((resolve, reject) => {
-            this._workerPool.addWorkerTask({data, resolve});
-        });
-    }
-
     private processData(iconFile: string, id: any, data: any): Promise<IFoundResult> {
         if (!data) {
             return Promise.reject('Fail to load image');
         }
 
-        return this.spawnWorker(data).then((pngImage: any) => {
-            return this._imageCache.saveImage(iconFile, pngImage).then((url: string) => {
+        return new Promise<any>((resolve, reject) => {
+            this._workerPool.addWorkerTask({ data, resolve, assetName: undefined, spriteName: undefined });
+        }).then((rawBitmap: any) => {
+            return this._imageCache.saveImage(iconFile, rawBitmap).then((url: string) => {
                 return Promise.resolve({
                     id: id,
                     url: url
