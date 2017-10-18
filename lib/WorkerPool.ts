@@ -16,14 +16,12 @@ export class WorkerThread
     run(workerTask: WorkerTask): void {
         this.workerTask = workerTask;
         // create a new web worker
-        console.log("Start worker");
         const worker: Worker = new this.parentPool.AssetWorker();
         worker.addEventListener('message', (message: any) => {
             this.workerTask.resolve(message.data);
             this.workerDone();
-            console.log("Worker done");
         });
-        worker.postMessage(workerTask.data/*, [workerTask.data]*/); //TODO: Apparently, this polyfilled buffer is not Transferrable
+        worker.postMessage(workerTask.data.buffer, [workerTask.data.buffer]);
     }
 
     workerDone() {
