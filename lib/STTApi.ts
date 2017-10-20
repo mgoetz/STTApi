@@ -46,7 +46,15 @@ export class STTApiClass {
 	private _imageProvider : ImageProvider;
 
 	constructor() {
-		this._accessToken = undefined;
+		this.refreshEverything(true);
+
+		this._net = new NetworkFetch();
+
+		// TODO: Dexie uses IndexedDB, so doesn't work in plain node.js without polyfill - should the caching be an interface?
+		this._cache = new DexieCache("sttcache");
+	}
+
+	refreshEverything(logout: boolean) {
 		this._crewAvatars = null;
 		this._serverConfig = null;
 		this._playerData = null;
@@ -59,11 +67,11 @@ export class STTApiClass {
 		this._ships = null;
 		this._missions = null;
 		this._missionSuccess = [];
+		this._minimalComplement = new MinimalComplement();
 
-		this._net = new NetworkFetch();
-
-		// TODO: Dexie uses IndexedDB, so doesn't work in plain node.js without polyfill - should the caching be an interface?
-		this._cache = new DexieCache("sttcache");
+		if (logout) {
+			this._accessToken = undefined;
+		}
 	}
 
 	setImageProvider(useAssets: boolean, imageCache: ImageCache|undefined) {
