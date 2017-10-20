@@ -63,15 +63,15 @@ export default class CONFIG {
 		'icon_security_skill': { asset: 'atlas_stt_icons', url: undefined },
 		'icon_shuttle_lg': { asset: 'atlas_stt_icons', url: undefined },
 		'node_icon': { asset: 'atlas_stt_icons', url: undefined },
-		'pe_currency_icon': { asset: 'atlas_stt_icons', url: undefined },  // merits
-		'pp_currency_icon': { asset: 'atlas_stt_icons', url: undefined }, // dilithium
-		'soft_currency_icon': { asset: 'atlas_stt_icons', url: undefined }, // credits
+		'pe_currency_icon': { asset: 'atlas_stt_icons', url: undefined },
+		'pp_currency_icon': { asset: 'atlas_stt_icons', url: undefined },
+		'soft_currency_icon': { asset: 'atlas_stt_icons', url: undefined },
 		'victory_point_icon': { asset: 'atlas_stt_icons', url: undefined },
 		'energy_icon': { asset: 'atlas_stt_icons', url: undefined }, // chronitons
 		'cadet_icon': { asset: 'atlas_stt_icons', url: undefined }, // cadet
-		'images_currency_honor_currency_0': { asset: '', url: undefined },
-		'images_currency_pe_currency_0': { asset: '', url: undefined },
-		'images_currency_pp_currency_0': { asset: '', url: undefined },
-		'images_currency_sc_currency_0': { asset: '', url: undefined }
+		'images_currency_honor_currency_0': { asset: '', url: undefined }, // honor
+		'images_currency_pe_currency_0': { asset: '', url: undefined }, // merits
+		'images_currency_pp_currency_0': { asset: '', url: undefined }, // dilithium
+		'images_currency_sc_currency_0': { asset: '', url: undefined } // credits
 	};
 }

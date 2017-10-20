@@ -41,7 +41,7 @@ export class STTApiClass {
 	private _ships: any;
 	private _missions: any;
 	private _missionSuccess: IChallengeSuccess[];
-	private _minimalComplement: MinimalComplement;
+	private _minimalComplement?: MinimalComplement;
 	private _cache: DexieCache;
 	private _imageProvider : ImageProvider;
 
@@ -67,7 +67,7 @@ export class STTApiClass {
 		this._ships = null;
 		this._missions = null;
 		this._missionSuccess = [];
-		this._minimalComplement = new MinimalComplement();
+		this._minimalComplement = undefined;
 
 		if (logout) {
 			this._accessToken = undefined;
@@ -99,7 +99,7 @@ export class STTApiClass {
 		return this._missionSuccess;
 	}
 
-	get minimalComplement(): MinimalComplement {
+	get minimalComplement(): MinimalComplement|undefined {
 		return this._minimalComplement;
 	}
 
@@ -116,7 +116,7 @@ export class STTApiClass {
 	set missionSuccess(value: any) {
 		this._missionSuccess = value;
 	}
-	set minimalComplement(value: MinimalComplement) {
+	set minimalComplement(value: MinimalComplement|undefined) {
 		this._minimalComplement = value;
 	}
 
