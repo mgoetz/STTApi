@@ -27,7 +27,7 @@ function computeCrewSuccessmissionSuccess(missionSuccess: any): MinimalComplemen
     do {
         before = allConsideredCrew.size;
 
-        for (let crewId of allConsideredCrew) {
+        for (let crewId of Array.from(allConsideredCrew)) {
             let result = 0;
 
             missionSuccess.forEach((entry: any) => {

@@ -77,7 +77,7 @@ export class NetworkFetch implements NetworkInterface {
 			if (response && response.ok && response.body) {
 				var reader = response.body.getReader();
 				let buffers: Buffer[] = [];
-				function getAllData(): Promise<any> {
+				let getAllData = (): Promise<any> => {
 					return reader.read().then(function (result) {
 						if (!result.done) {
 							buffers.push(new Buffer(result.value));
