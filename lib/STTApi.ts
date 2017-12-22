@@ -222,9 +222,9 @@ export class STTApiClass {
 	}
 
 	loginWithCachedAccessToken(): Promise<boolean> {
-		return this._cache.config.where('key').equals('autoLogin').first((entry: ConfigTable) => {
+		return this._cache.config.where('key').equals('autoLogin').first((entry: ConfigTable | undefined) => {
 			if (entry && entry.value === true) {
-				return this._cache.config.where('key').equals('accessToken').first((entry: ConfigTable) => {
+				return this._cache.config.where('key').equals('accessToken').first((entry: ConfigTable | undefined) => {
 					if (entry && entry.value) {
 						this._accessToken = entry.value;
 						return Promise.resolve(true);
