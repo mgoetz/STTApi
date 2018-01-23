@@ -27,7 +27,7 @@
     "typescript": "^2.5.3"
   },
   "dependencies": {
-    "ab-parser": "file:./AssetParser",
+    "ab-parser": "file:assetparser",
     "dexie": "^2.0.1",
     "url-search-params-polyfill": "^2.0.2"
   }
