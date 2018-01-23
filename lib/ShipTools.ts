@@ -5,8 +5,7 @@ export function matchShips(ships: any): Promise<any> {
 	STTApi.shipSchematics.forEach((schematic: any) => {
 		let owned = ships.find((ship: any) => ship.name == schematic.ship.name);
 		if (owned) {
-			schematic.ship.level = owned.level;
-			schematic.ship.id = owned.id;
+			schematic.ship = owned;
 		}
 		else {
 			schematic.ship.level = 0;

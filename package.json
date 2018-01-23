@@ -22,13 +22,13 @@
   },
   "homepage": "https://github.com/IAmPicard/STTApi#readme",
   "devDependencies": {
-    "@types/node": "^8.0.32",
+    "@types/node": "^8.5.9",
     "copyfiles": "^1.2.0",
     "typescript": "^2.5.3"
   },
   "dependencies": {
-    "dexie": "^2.0.1",
     "ab-parser": "file:./AssetParser",
-    "url-search-params-polyfill": "^2.0.1"
+    "dexie": "^2.0.1",
+    "url-search-params-polyfill": "^2.0.2"
   }
 }
